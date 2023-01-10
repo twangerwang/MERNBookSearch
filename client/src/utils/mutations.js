@@ -22,6 +22,7 @@ mutation addUser($username: String!, $email: String!, $password: String!) {
             email
         }
     }
+  }
 `;
 
 export const SAVE_BOOK = gql`
