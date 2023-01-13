@@ -5,16 +5,15 @@ const typeDefs = gql`
     _id: ID!
     username: String!
     email: String!
-    password: String!
     savedBooks: [Book]
+    bookCount: Int
   }
   type Book {
-    _id: ID!
+    bookId: ID!
     authors: [String]
-    description: [String!]
-    bookId: [String!]
-    image: [String]
-    link: [String]
+    description: String
+    image: String
+    link: String
     title: String!
   }
   type Auth {
@@ -39,7 +38,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String, password: String!): Auth
     saveBook(bookToSave: BookInput!): User
-    deleteBook(bookToDelete: ID!): User
+    deleteBook(bookId: ID!): User
   }
 `;
 module.exports = typeDefs;

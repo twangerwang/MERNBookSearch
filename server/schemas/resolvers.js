@@ -16,10 +16,14 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ username, email, password });
-      const token = signToken(user);
-      return { token, user };
+    addUser: async (parent, args) => {
+      try {
+        const user = await User.create(args);
+        const token = signToken(user);
+        return { token, user };
+      } catch (err) {
+        console.log(err);
+      }
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
@@ -38,26 +42,26 @@ const resolvers = {
 
       return { token, user };
     },
-    saveBook: async (parent, args, context) => {
+    saveBook: async (parent, { bookToSave }, context) => {
       if (context.user) {
-        const user = await User.findByIdAndUpdate(
-          { _id: context.user.id },
-          { $push: { savedBooks: args.bookToSave } },
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $push: { savedBooks: bookToSave } },
           { new: true }
         );
-        return user;
+        return updatedUser;
       } else {
         throw new AuthenticationError("Not logged in");
       }
     },
-    deleteBook: async (parent, args, context) => {
+    deleteBook: async (parent, { bookId }, context) => {
       if (context.user) {
-        const user = await User.findByIdAndUpdate(
-          { _id: context.user.id },
-          { $pull: { savedBooks: { bookId: args.bookToDelete } } },
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
           { new: true }
         );
-        return user;
+        return updatedUser;
       } else {
         throw new AuthenticationError("Not logged in");
       }
