@@ -1,12 +1,10 @@
-const path = require("path");
 require("dotenv").config();
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const jwt = require("jsonwebtoken");
 
 // set token secret and expiration date
-const secret = process.env.JWT_SECRET;
-console.log(process.env.JWT_SECRET);
+const secret = process.env.REACT_APP_JWT_SECRET;
+// console.log(process.env.JWT_SECRET);
 const expiration = "2h";
 
 module.exports = {
